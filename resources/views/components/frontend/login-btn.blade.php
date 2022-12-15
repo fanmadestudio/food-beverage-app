@@ -1,0 +1,2 @@
+<button type="button" class="text-gray-700 text-base font-medium flex justify-center items-center mx-2 rounded-full bg-transparent border-2 border-gray-700 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-gray-300/50 focus:rounded-full px-6 py-2">Login</button>
+<button type="button" class="text-white text-base font-medium flex justify-center items-center mx-2 rounded-full bg-gray-700 border-2 border-gray-700 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-gray-300/50 focus:rounded-full px-6 py-2">Sign up</button>
