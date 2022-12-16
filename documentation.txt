@@ -1,0 +1,316 @@
+Food & Beverage Documentation 
+
+Update 
+
+Laravel Brezze already updated "laravel/breeze": "^1.15",
+    - resources/views/profile, folder not yet on administrator folder.
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+Color Scheme
+
+    a. Background Color Default
+        - bg-white 
+        - dark:bg-gray-900
+    
+    b. Text Color Default
+        - text-slate-700
+
+    c. Button Default Color
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+NOTE 
+
+Date 12 16 2022
+
+1. Make Display Image for header
+
+    a. Make a CRUD (model & migration, controller)
+    
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+
+1. Admin User
+
+    a. database/migration/2014_10_12_000000_create_users_table.php
+
+        - On this code
+    
+            Schema::create('users', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('name');
+                    $table->string('email')->unique();
+                    $table->timestamp('email_verified_at')->nullable();
+                    $table->string('password');
+                    ... <-
+                    $table->rememberToken();
+                    $table->timestamps();
+            });
+
+        - Add $table->boolean('is_admin')->default(false);
+
+    b. Make a Seeder of Admin for Database User
+
+        - Terminal -> php artisan make:seeder Admin
+
+            Add use App\Models\User;
+            Add use illuminate\Support\Str;
+
+        - On this code
+        
+            public function run()
+            {
+            // ... <-
+            }
+
+        - Add this code 
+
+            User::create([
+                'name' => 'Admin',
+                'email' => 'fmstudioid@gmail.com',
+
+
+                Can get this from Userfactory
+
+                'email_verified_at' => now(),
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'remember_token' => Str::random(10),
+
+                'is_admin' => 1
+            ]);
+
+    c. DatabaseSeeder
+
+        - On this code
+
+            public function run()
+            {
+                // \App\Models\User::factory(10)->create();
+
+                // \App\Models\User::factory()->create([
+                //     'name' => 'Test User',
+                //     'email' => 'test@example.com',
+                // ]);
+                ... <-
+            }
+
+        - Add $this->call(Admin::class);
+
+        - Terminal -> php artisan migrate:fresh --seed
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+2. Admin Middleware
+
+    a. Make an Admin Middleware
+
+        - Terminal -> php artisan make:middleware Admin
+    
+    b. Setting on app/Http/Middleware/Admin.php 
+
+        - On this code
+        
+        public function handle(Request $request, Closure $next)
+        {
+            ... <-
+            return $next($request);
+        }
+
+        - Add method if
+        
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403);
+        }
+
+    c. Setting on Kernel File app/Http/Kernel.php
+
+        - On this code 
+
+            protected $routeMiddleware = [
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+            'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
+            'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+            'can' => \Illuminate\Auth\Middleware\Authorize::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+            'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+            'signed' => \App\Http\Middleware\ValidateSignature::class,
+            'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+            ... <-
+        ];
+
+        - Add Admin Middleware 'admin' => App\Http\Middleware\Admin::class,
+
+    d. Setting Route for Middleware
+
+        - Add this code
+
+            Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
+                Route::get('/', [AdminController::class, 'index'])->name('index');
+                Route::resource('/categories', CategoryController::class);
+                Route::resource('/menus', MenuController::class);
+                Route::resource('/tables', TablesController::class);
+                Route::resource('/reservations', ReservationController::class);
+            }); 
+
+    e. Make a controller for Admin, Terminal -> php artisan make:controller Admin/AdminController -r
+
+        - On this code
+            
+            public function index()
+            {
+                // ... <-
+            }
+
+        - Add this code return view ('admin.index');
+
+        - Make a folder on resources/views/.., make a folder admin and add file index.blade.php . 
+
+    f. Make an Admin Layout
+
+        - app/View/Components/, save as layout file AppLayout.php become AdminLayout.php . 
+
+        - resources/views/layouts/, save as layout file app.blade.php become admin.blade.php .
+
+        - Change this code return view('layouts.app');
+
+            class AppLayout extends Component
+                {
+                    /**
+                    * Get the view / contents that represents the component.
+                    *
+                    * @return \Illuminate\View\View
+                    */
+                    public function render()
+                    {
+                        return view('layouts.app');
+                    }
+                }
+
+        - Into this code return view('layouts.admin');
+
+            class AdminLayout extends Component
+                {
+                    /**
+                    * Get the view / contents that represents the component.
+                    *
+                    * @return \Illuminate\View\View
+                    */
+                    public function render()
+                    {
+                        return view('layouts.admin');
+                    }
+                }
+
+        - Change blade template on index admin into AdminLayout
+
+        - Testing
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+
+3. Model and Migrations
+
+    a. Make a Model.
+
+        - Terminal -> php artisan make:model UserModel -m
+        
+        - database/migrations/.., find file with name .._create_UserModel_table.php
+
+        - On this code
+
+            /**
+            * Run the migrations.
+            *
+            * @return void
+            */
+            public function up()
+            {
+                Schema::create('docs', function (Blueprint $table) {
+                    $table->id();
+                    ... <-
+                    $table->timestamps();
+                });
+            }
+        
+        - Add this code
+
+            /**
+            * Run the migrations.
+            *
+            * @return void
+            */
+            public function up()
+            {
+                Schema::create('docs', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('title');
+                    $table->text('contents');
+                    $table->string('image');
+                    $table->text('alt');
+                    $table->string('author');
+                    $table->timestamps();
+                });
+            }
+        
+        - Terminal -> php artisan migrate
+
+4. Controllers
+
+    a. Make a Controller
+
+        - php artisan make:Controller UserFolder/UserController -r (if working for backend and using resource controller)
+        
+        - php artisan make:Controller UserController -r (if using resource controller)
+
+        - routes/web.php, Set routes, on this code.
+
+            Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
+                Route::get('/admin', [AdminController::class, 'index'])->name('index');
+                ... <-
+            });
+
+        - Add this code
+
+            Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
+                Route::get('/admin', [AdminController::class, 'index'])->name('index');
+                Route::resource('/userfolder', [UserController::class, 'function'])->name('desired route names')
+            });
+
+        - Route to user file {{ route('user.file.function') }}
+
+    b. Method on html file 
+
+        - Using this code {{ route('user.route.file.') }}
+
+    c. Setting on UserController
+
+        - Add this code 
+        
+            public function index() 
+            {
+                return view('user.file');
+            }
+
+    d. Make a Model for require entry data.
+    
+        - Terminal -> php artisan make:Model Products
+
+    e. CRUD, every section must have own controller
+
+<!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+5. 
+
+
+
+    
+
+
+
+        
