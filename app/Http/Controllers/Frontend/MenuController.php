@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
-class HomeController extends Controller
+
+class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         $highlights = Menu::latest('created_at')->first();
-        $menus = Menu::all();
-        return view('index', compact('highlights', 'menus'));
+        return view('frontend.menus.index', compact('highlights'));
     }
 
     /**
@@ -48,9 +47,9 @@ class HomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Menu $menus)
+    public function show($id)
     {
-        return view('index', compact('menus'));
+        //
     }
 
     /**

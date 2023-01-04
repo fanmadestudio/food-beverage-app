@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Http\Requests\CategoryStoreRequest;
+use App\Models\Highlight;
+use App\Models\Menu;
+use App\Http\Requests\HighlightStoreRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class CategoryController extends Controller
+class HighlightController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +18,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('admin.categories.index', compact('categories'));
+        $highlights = Menu::latest('created_at')->first();
+        return view('admin.highlights.index', compact('highlights'));
     }
 
     /**
@@ -28,7 +29,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        return view('admin.highlights.create');
     }
 
     /**
@@ -37,17 +38,17 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryStoreRequest $request)
+    public function store(HighlightStoreRequest $request)
     {
-        $image = $request->file('image')->store('public/categories');
+        $image = $request->file('image')->store('public/highlights');
 
-        Category::create([
+        Highlight::create([
             'name' => $request->name,
             'image' => $image,
             'description' => $request->description,
         ]);
 
-        return  to_route('admin.categories.index');
+        return to_route('admin.highlights.index');
     }
 
     /**
@@ -67,9 +68,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(Highlight $highlight)
     {
-        return view('admin.categories.edit', compact('category'));
+        return view('admin.highlights.edit', compact('highlight'));
     }
 
     /**
@@ -79,26 +80,26 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(HighlightStoreRequest $request, Highlight $highlight)
     {
         $request->validate([
             'name' => 'required',
             'description' => 'required',
         ]);
 
-        $image = $category->image;
+        $image = $highlight->image;
         if ($request->hasFile('image')) {
-            Storage::delete($category->image);
-            $image = $request->file('image')->store('public/categories');
+            Storage::delete($highlight->image);
+            $image = $request->file('image')->store('public/highlights');
         }
 
-        $category->update([
+        $highlight->update([
             'name' => $request->name,
             'image' => $image,
             'description' => $request->description
         ]);
 
-        return to_route('admin.categories.index');
+        return to_route('admin.highlights.index');
     }
 
     /**
@@ -107,11 +108,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Highlight $highlight)
     {
-        Storage::delete($category->image);
-        $category->delete();
+        Storage::delete($highlight->image);
+        $highlight->delete();
 
-        return to_route('admin.categories.index');
+        return to_route('admin.highlights.index');
     }
 }
