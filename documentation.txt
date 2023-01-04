@@ -303,10 +303,58 @@ Date 12 16 2022
 
     e. CRUD, every section must have own controller
 
+        - Terminal -> php artisan make:request UserStoreRequest
+
+        - Set Request for UserStoreRequest
+
+            public function rules()
+            {
+                return [
+                    // ...<-----
+                ];
+            }
+
+        - Add your request
+
+    d. Use this command on Terminal
+
+        - Terminal -> php artisan storage:link
+
 <!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-5. 
+5. Highlight Feature
 
+    a. First Method
+
+        - HomeController, method index.
+
+            public function index()
+            {
+                $highlights = Menu::latest('created_at')->first();
+                return view('index', compact('highlights'));
+            }
+
+        - Add this code on <img src="">. This code must be use for highlights. 
+
+            <img class="rounded-full" src="{{ Storage::url($highlights->image) }}" />
+
+    b. Second Method
+
+        - Terminal -> php artisan make:controller Frontend/HighlightController -r 
+
+        - HighlightController, method index.
+
+            public function index()
+            {
+                $highlights = Menu::latest('created_at')->first();
+                return view('components.frontend.highlight.index', compact('highlights'));
+            }
+
+        - Make a file (index.blade.php) and folder (highlight) on folder components.frontend.
+
+        - Add this code on <img src="">. This code must be use for highlights. 
+
+            <img class="rounded-full" src="{{ Storage::url($highlights->image) }}" />
 
 
     
