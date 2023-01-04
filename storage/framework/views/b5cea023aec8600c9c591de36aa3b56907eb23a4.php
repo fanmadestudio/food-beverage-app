@@ -9,7 +9,7 @@
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <?php echo e(__('Menus')); ?>
+            <?php echo e(__('Reservations')); ?>
 
         </h2>
      <?php $__env->endSlot(); ?>
@@ -17,33 +17,36 @@
     <div class="h-fit w-screen p-6 mt-4 mx-2 bg-white border-b border-gray-200 rounded-xl shadow-md sm:px-6 lg:px-8">
 
         <!-- Subtitle -->
-        <h3 class="text-3xl">Menu 1</h3>
+        <h3 class="text-3xl">Reservation</h3>
 
         <div class="flex justify-end mt-10 m-2 p-2">
-            <a href="<?php echo e(route('admin.menus.create')); ?>" class="bg-sky-500 hover:bg-sky-500/60 text-white px-4 py-2 rounded-lg">New Menu</a>
+            <a href="<?php echo e(route('admin.reservations.create')); ?>" class="bg-sky-500 hover:bg-sky-500/60 text-white px-4 py-2 rounded-lg">New Reservation</a>
         </div>
+
 
         <!-- Table -->
         <div class="mt-10 mb-10 mx-6 overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr class="text-center">
+                    <tr class="text-center ">
                         <th scope="col" class="py-3 px-6">
                             Name
                         </th>
                         <th scope="col" class="py-3 px-6">
-                            Image
+                            Email
                         </th>
                         <th scope="col" class="py-3 px-6">
-                            Category
+                            Telephone Number
                         </th>
                         <th scope="col" class="py-3 px-6">
-                            Description
+                            Reservation Number
                         </th>
                         <th scope="col" class="py-3 px-6">
-                            Price
+                            Table ID
                         </th>
-
+                        <th scope="col" class="py-3 px-6">
+                            Guest Number
+                        </th>
 
                         <!-- Title with dropdown -->
                         <!-- <th scope="col" class="py-3 px-6">
@@ -61,31 +64,37 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $menus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $reservations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reservation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center">
-                        <th scope="row" class="py-4 px-6 font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                            <?php echo e($menu->name); ?>
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <?php echo e($reservation->first_name); ?> <?php echo e($reservation->last_name); ?>
 
                         </th>
                         <td class="py-4 px-6">
-                            <img src="<?php echo e(Storage::url($menu->image)); ?>" class="w-96 rounded" />
-                        </td>
-                        <td class="py-4 px-6">
-                            <?php echo e($menu->category); ?>
-
-                        </td>
-                        <td class="py-4 px-6 text-xs">
-                            <?php echo e($menu->description); ?>
+                            <?php echo e($reservation->email); ?>
 
                         </td>
                         <td class="py-4 px-6">
-                            Rp<?php echo e($menu->price); ?>
+                            <?php echo e($reservation->tel_number); ?>
 
                         </td>
+                        <td class="py-4 px-6">
+                            <?php echo e($reservation->res_date); ?>
+
+                        </td>
+                        <td class="py-4 px-6">
+                            <?php echo e($reservation->table_id); ?>
+
+                        </td>
+                        <td class="py-4 px-6">
+                            <?php echo e($reservation->guest_number); ?>
+
+                        </td>
+
                         <td class="py-4 px-6 text-right">
                             <div class="flex gap-2">
-                                <a href="<?php echo e(route('admin.menus.edit', $menu->id)); ?>" class="bg-sky-500 hover:bg-sky-500/50 rounded-xl px-4 py-2 font-medium text-white dark:text-white hover:underline">Edit</a>
-                                <form class="bg-red-500 hover:bg-red-500/50 rounded-xl px-4 py-2 font-medium text-white dark:text-white hover:underline" method="POST" action="<?php echo e(route('admin.menus.destroy', $menu->id)); ?>" onsubmit="return confirm('Are you sure?');">
+                                <a href="<?php echo e(route('admin.reservations.edit', $reservation->id)); ?>" class="bg-sky-500 hover:bg-sky-500/50 rounded-xl px-4 py-2 font-medium text-white dark:text-white hover:underline">Edit</a>
+                                <form class="bg-red-500 hover:bg-red-500/50 rounded-xl px-4 py-2 font-medium text-white dark:text-white hover:underline" method="POST" action="<?php echo e(route('admin.reservations.destroy', $reservation->id)); ?>" onsubmit="return confirm('Are you sure?');">
                                     <?php echo csrf_field(); ?>
                                     <?php echo method_field('DELETE'); ?>
                                     <button type="submit">Delete</button>
@@ -97,10 +106,11 @@
                 </tbody>
             </table>
         </div>
+
     </div>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalbacdc7ee2ae68d90ee6340a54a5e36f99d0a3040)): ?>
 <?php $component = $__componentOriginalbacdc7ee2ae68d90ee6340a54a5e36f99d0a3040; ?>
 <?php unset($__componentOriginalbacdc7ee2ae68d90ee6340a54a5e36f99d0a3040); ?>
-<?php endif; ?><?php /**PATH D:\laragon\www\foodnbeverage-app\resources\views/admin/menus/index.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH D:\laragon\www\foodnbeverage-app\resources\views/admin/reservations/index.blade.php ENDPATH**/ ?>

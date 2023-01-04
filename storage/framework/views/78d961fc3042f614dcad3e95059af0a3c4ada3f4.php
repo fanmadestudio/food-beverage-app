@@ -40,24 +40,14 @@
         </div>
 
         <!-- Right Section -->
-        <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.highlight.index','data' => []] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
-<?php $component->withName('frontend.highlight.index'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
-<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
-<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
-<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
-<?php endif; ?>
-
+        <div class="p-2">
+            <?php $__currentLoopData = $menus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <!-- <img class="rounded-full" src="https://dummyimage.com/460x460/dedede/000000&text=Your+Image" /> -->
+            <img class="rounded-full" src="<?php echo e(Storage::url($menu->image)); ?>" />
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
     </div>
 </div>
 <div class="p-2">
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus perferendis consequatur placeat eius iure velit. Ab eos quaerat dolor laboriosam nemo iste similique, laudantium culpa pariatur eius amet aliquam sequi?
-</div><?php /**PATH D:\laragon\www\foodnbeverage-app\resources\views/components/frontend/header.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\laragon\www\foodnbeverage-app\resources\views/components/frontend/header/show.blade.php ENDPATH**/ ?>

@@ -1,0 +1,1 @@
+components.frontend.ordernow-btn<?php /**PATH D:\laragon\www\foodnbeverage-app\storage\framework\views/27f574cb78fb9a8b17a4585ada2ba1b62d32df98.blade.php ENDPATH**/ ?>
